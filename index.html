@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harsa Coffee - Menu & Order</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --coffee-brown: #8B4513;
+            --coffee-light: #D2B48C;
+            --coffee-dark: #3E2723;
+            --cream: #F5F5DC;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--coffee-light) 100%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: var(--coffee-dark) !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--cream) !important;
+        }
+
+        .navbar-logo {
+            width: 40px;
+            height: 40px;
+            margin-right: 12px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid var(--cream);
+        }
+
+        .hero-logo {
+            width: 80px;
+            height: 80px;
+            margin-right: 20px;
+            border-radius: 15px;
+            object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .hero-section h1 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-section {
+            background: linear-gradient(rgba(62, 39, 35, 0.8), rgba(62, 39, 35, 0.8)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%238B4513" width="1200" height="600"/><circle fill="%23D2B48C" opacity="0.1" cx="200" cy="150" r="80"/><circle fill="%23D2B48C" opacity="0.1" cx="800" cy="300" r="120"/><circle fill="%23D2B48C" opacity="0.1" cx="400" cy="450" r="60"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+        }
+
+        .menu-section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--coffee-dark);
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .menu-card-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card-img::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+
+        .menu-card-body {
+            padding: 25px;
+        }
+
+        .menu-card-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--coffee-dark);
+            margin-bottom: 10px;
+        }
+
+        .menu-card-description {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .menu-card-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--coffee-brown);
+            margin-bottom: 15px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .quantity-btn {
+            background: var(--coffee-brown);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .quantity-btn:hover {
+            background: var(--coffee-dark);
+        }
+
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            border: 2px solid var(--coffee-light);
+            border-radius: 8px;
+            margin: 0 10px;
+            padding: 5px;
+        }
+
+        .add-to-cart-btn {
+            background: var(--coffee-brown);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            width: 100%;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart-btn:hover {
+            background: var(--coffee-dark);
+            transform: translateY(-2px);
+        }
+
+        .cart-section {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .cart-title {
+            color: var(--coffee-dark);
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--coffee-brown);
+            text-align: center;
+            margin: 20px 0;
+            padding-top: 15px;
+            border-top: 2px solid var(--coffee-light);
+        }
+
+        .order-btn {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            width: 100%;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .order-btn:hover {
+            background: linear-gradient(45deg, #128C7E, #25D366);
+            transform: translateY(-2px);
+        }
+
+        .order-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .remove-item-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <!-- Ganti URL di bawah ini dengan URL logo Anda -->
+                <img src="https://images.unsplash.com/photo-1611854779393-1b2da9d400ac?w=100&h=100&fit=crop&crop=center" 
+                     alt="Harsa Coffee Logo" 
+                     class="navbar-logo"
+                     id="navbarLogo">
+                Harsa Coffee
+            </a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <h1>
+                <!-- Logo yang sama dengan navbar -->
+                <img src="https://images.unsplash.com/photo-1611854779393-1b2da9d400ac?w=100&h=100&fit=crop&crop=center" 
+                     alt="Harsa Coffee Logo" 
+                     class="hero-logo"
+                     id="heroLogo">
+                Harsa Coffee
+            </h1>
+            <p>Nikmati cita rasa kopi terbaik dengan suasana yang hangat dan nyaman</p>
+            <a href="#menu" class="btn btn-lg" style="background: var(--coffee-brown); color: white; border-radius: 25px; padding: 12px 30px;">
+                Lihat Menu <i class="fas fa-arrow-down"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="menu-section">
+        <div class="container">
+            <div class="section-title">
+                <h2><i class="fas fa-list"></i> Menu Kami</h2>
+                <p>Pilihan kopi dan minuman terbaik untuk menemani hari Anda</p>
+            </div>
+
+            <div class="row">
+                <!-- Menu Items Column -->
+                <div class="col-lg-8">
+                    <div class="row" id="menuItems">
+                        <!-- Menu items will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Cart Column -->
+                <div class="col-lg-4">
+                    <div class="cart-section">
+                        <div class="cart-title">
+                            <i class="fas fa-shopping-cart"></i> Keranjang Pesanan
+                        </div>
+                        
+                        <!-- Table Number Input -->
+                        <div class="mb-3">
+                            <label for="tableNumber" class="form-label" style="color: var(--coffee-dark); font-weight: bold;">
+                                <i class="fas fa-chair"></i> Nomor Meja
+                            </label>
+                            <input type="number" class="form-control" id="tableNumber" placeholder="Masukkan nomor meja" min="1" max="50" 
+                                   style="border: 2px solid var(--coffee-light); border-radius: 8px; padding: 10px;">
+                        </div>
+                        
+                        <div id="cartItems">
+                            <p class="text-center text-muted">Keranjang masih kosong</p>
+                        </div>
+                        <div id="cartTotal" class="cart-total" style="display: none;">
+                            Total: Rp 0
+                        </div>
+                        <button id="orderBtn" class="order-btn" disabled>
+                            <i class="fab fa-whatsapp"></i> Pesan via WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Logo Configuration - GANTI URL LOGO DI SINI
+        const LOGO_URL = "https://images.unsplash.com/photo-1611854779393-1b2da9d400ac?w=100&h=100&fit=crop&crop=center";
+        
+        // Function to update logo
+        function updateLogo(logoUrl) {
+            document.getElementById('navbarLogo').src = logoUrl;
+            document.getElementById('heroLogo').src = logoUrl;
+        }
+
+        // Menu Data
+        const menuData = [
+            {
+                id: 1,
+                name: "Espresso",
+                description: "Kopi murni dengan rasa yang kuat dan aroma yang khas",
+                price: 15000,
+                image: "https://images.unsplash.com/photo-1510707577661-a512c9c4fe5e?w=400&h=300&fit=crop&crop=center"
+            },
+            {
+                id: 2,
+                name: "Cappuccino",
+                description: "Espresso dengan susu dan foam yang creamy",
+                price: 25000,
+                image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&h=300&fit=crop&crop=center"
+            },
+            {
+                id: 3,
+                name: "Latte",
+                description: "Espresso dengan susu steamed yang lembut",
+                price: 28000,
+                image: "https://images.unsplash.com/photo-1561047029-3000c68339ca?w=400&h=300&fit=crop&crop=center"
+            },
+            {
+                id: 4,
+                name: "Americano",
+                description: "Espresso dengan air panas, rasa coffee yang clean",
+                price: 18000,
+                image: "https://images.unsplash.com/photo-1497636577773-f1231844b336?w=400&h=300&fit=crop&crop=center"
+            },
+            {
+                id: 5,
+                name: "Mocha",
+                description: "Espresso dengan cokelat dan whipped cream",
+                price: 32000,
+                image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop&crop=center"
+            },
+            {
+                id: 6,
+                name: "Macchiato",
+                description: "Espresso dengan sedikit susu foam di atasnya",
+                price: 26000,
+                image: "https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=400&h=300&fit=crop&crop=center"
+            },
+            {
+                id: 7,
+                name: "Cold Brew",
+                description: "Kopi dingin yang diseduh dengan metode cold drip",
+                price: 22000,
+                image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?w=400&h=300&fit=crop&crop=center"
+            },
+            {
+                id: 8,
+                name: "Iced Coffee",
+                description: "Kopi es dengan rasa yang segar dan menyegarkan",
+                price: 20000,
+                image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&h=300&fit=crop&crop=center"
+            },
+            {
+                id: 9,
+                name: "Hot Chocolate",
+                description: "Cokelat panas yang creamy dan hangat",
+                price: 24000,
+                image: "https://images.unsplash.com/photo-1542990253-0b8da8035ba8?w=400&h=300&fit=crop&crop=center"
+            }
+        ];
+
+        let cart = [];
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Render menu items
+        function renderMenu() {
+            const menuContainer = document.getElementById('menuItems');
+            menuContainer.innerHTML = '';
+
+            menuData.forEach(item => {
+                const menuCard = `
+                    <div class="col-md-6 col-lg-12 col-xl-6">
+                        <div class="menu-card">
+                            <div class="menu-card-img" style="background-image: url('${item.image}')"></div>
+                            <div class="menu-card-body">
+                                <div class="menu-card-title">${item.name}</div>
+                                <div class="menu-card-description">${item.description}</div>
+                                <div class="menu-card-price">${formatCurrency(item.price)}</div>
+                                <div class="quantity-control">
+                                    <button class="quantity-btn" onclick="decreaseQuantity(${item.id})">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" class="quantity-input" id="qty-${item.id}" value="1" min="1" max="99">
+                                    <button class="quantity-btn" onclick="increaseQuantity(${item.id})">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <button class="add-to-cart-btn" onclick="addToCart(${item.id})">
+                                    <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                menuContainer.innerHTML += menuCard;
+            });
+        }
+
+        // Quantity controls
+        function increaseQuantity(itemId) {
+            const input = document.getElementById(`qty-${itemId}`);
+            let value = parseInt(input.value);
+            if (value < 99) {
+                input.value = value + 1;
+            }
+        }
+
+        function decreaseQuantity(itemId) {
+            const input = document.getElementById(`qty-${itemId}`);
+            let value = parseInt(input.value);
+            if (value > 1) {
+                input.value = value - 1;
+            }
+        }
+
+        // Add to cart
+        function addToCart(itemId) {
+            const item = menuData.find(m => m.id === itemId);
+            const quantity = parseInt(document.getElementById(`qty-${itemId}`).value);
+            
+            const existingItem = cart.find(c => c.id === itemId);
+            
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({
+                    ...item,
+                    quantity: quantity
+                });
+            }
+            
+            // Reset quantity input
+            document.getElementById(`qty-${itemId}`).value = 1;
+            
+            renderCart();
+        }
+
+        // Remove from cart
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            renderCart();
+        }
+
+        // Render cart
+        function renderCart() {
+            const cartContainer = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            const orderBtn = document.getElementById('orderBtn');
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = '<p class="text-center text-muted">Keranjang masih kosong</p>';
+                cartTotal.style.display = 'none';
+                orderBtn.disabled = true;
+                return;
+            }
+
+            let cartHTML = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                cartHTML += `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            <small>${item.quantity}x ${formatCurrency(item.price)}</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <span class="me-2">${formatCurrency(itemTotal)}</span>
+                            <button class="remove-item-btn" onclick="removeFromCart(${item.id})">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartContainer.innerHTML = cartHTML;
+            cartTotal.innerHTML = `Total: ${formatCurrency(total)}`;
+            cartTotal.style.display = 'block';
+            
+            // Enable order button only if cart has items and table number is provided
+            const tableNumber = document.getElementById('tableNumber').value;
+            orderBtn.disabled = cart.length === 0 || !tableNumber;
+        }
+
+        // Send order to WhatsApp
+        function sendToWhatsApp() {
+            const tableNumber = document.getElementById('tableNumber').value;
+            
+            if (cart.length === 0 || !tableNumber) {
+                alert('Pastikan keranjang tidak kosong dan nomor meja sudah diisi!');
+                return;
+            }
+
+            let message = "*PESANAN HARSA COFFEE*\n\n";
+            message += `🪑 *MEJA: ${tableNumber}*\n\n`;
+            
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `• ${item.name}\n`;
+                message += `  ${item.quantity}x ${formatCurrency(item.price)} = ${formatCurrency(itemTotal)}\n\n`;
+            });
+
+            message += `*TOTAL: ${formatCurrency(total)}*\n\n`;
+            message += "Terima kasih telah memesan di Harsa Coffee! ☕\n";
+            message += "Pesanan akan segera diproses.";
+
+            // Replace with your WhatsApp number (without + and spaces)
+            const phoneNumber = "6281371514417"; // Ganti dengan nomor WhatsApp Anda
+            const whatsappURL = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappURL, '_blank');
+            
+            // Optional: Clear cart and table number after ordering
+            // cart = [];
+            // document.getElementById('tableNumber').value = '';
+            // renderCart();
+        }
+
+        // Event listeners
+        document.getElementById('orderBtn').addEventListener('click', sendToWhatsApp);
+        
+        // Listen for table number input changes to enable/disable order button
+        document.getElementById('tableNumber').addEventListener('input', function() {
+            renderCart(); // This will check table number and update button state
+        });
+
+        // Smooth scrolling
+        document.querySelector('a[href="#menu"]').addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('menu').scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+
+        // Initialize
+        renderMenu();
+        
+        // Initialize logo (bisa dihapus jika tidak perlu)
+        updateLogo(LOGO_URL);
+    </script>
+</body>
+</html>
